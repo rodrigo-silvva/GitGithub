@@ -4,22 +4,20 @@ from matplotlib.animation import FuncAnimation
 
 initial_pos1 = 1
 initial_pos2 = 4 
-initial_velocity1 = 100
-initial_velocity2 = -100
+initial_velocity1 = 0.05
+initial_velocity2 = -0.1
 mass1 = 1.0
 mass2 = 1.5
-num_frames = 100
+num_frames = 1000
 boxsize = 5
 pos1 = initial_pos1
 pos2 = initial_pos2
 vel1 = initial_velocity1
 vel2 = initial_velocity2
-tempo_total = 5.0
-delta_t = 0.001
-num_frames = int(tempo_total / delta_t)
+
 
 def balls_colision (vel1,mass1,vel2,mass2):
-    vel1, vel2= (vel1*(mass1-mass2)+2*vel2*mass2)/(mass1+mass2), (vel2*(mass2-mass1)+2*vel1*mass1)/(mass1+mass2)
+    vel1, vel2= (vel1*(mass1-mass2)+2*vel2*mass2)/(mass1+mass2), (vel2*(mass2-mass1)+2*vel1*mass1)/(mass1+mass2)  
     return vel1,vel2
 def wall_colision_1 (vel1):
     vel1=-vel1
@@ -36,14 +34,14 @@ def simulate_collision(initial_pos1,initial_pos2,initial_velocity1,initial_veloc
     vel2 = initial_velocity2
 
     for i in range(1, num_frames):
-        pos1.append(pos1[-1] + vel1 * delta_t)
-        pos2.append(pos2[-1] + vel2 * delta_t)
+        pos1.append(pos1[-1] + vel1)
+        pos2.append(pos2[-1] + vel2)
 
-        if pos1[-1] >= pos2[-1]:
+        if pos1[-1] > pos2[-1]:
             vel1, vel2 = balls_colision(vel1, mass1, vel2, mass2)
-        elif pos1[-1] <= 0:
+        elif pos1[-1] < 0:
             vel1 = wall_colision_1(vel1)
-        elif pos2[-1] >= boxsize:
+        elif pos2[-1] > boxsize:
             vel2 = wall_colision_2(vel2)
 
     create_animation(pos1, pos2, boxsize)
